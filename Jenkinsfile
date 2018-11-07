@@ -40,11 +40,13 @@ environment {
     }
 
     stage('Build Image'){
-   
+   steps{
     dir(path: 'account-service'){
-    
-          dockerImage = docker.build registry +":version1"
+        steps{
+          docker.build registry +":version1"
+        } 
        
+}
 }
    
    }
