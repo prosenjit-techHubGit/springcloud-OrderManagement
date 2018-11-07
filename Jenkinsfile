@@ -31,5 +31,13 @@ pipeline {
 
       }
     }
+    stage('Docker image') {
+      steps {
+        dir(path: 'account-service') {
+          sh 'docker build -t prosenjitdocker2018/account-service:version1'
+        }
+
+      }
+    }
   }
 }
