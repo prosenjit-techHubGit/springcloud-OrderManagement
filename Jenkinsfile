@@ -33,8 +33,8 @@ pipeline {
     }
     stage('Docker image') {
       agent {
-        dockerfile {
-          filename 'Dockerfile'
+        node {
+          label 'docker'
         }
 
       }
