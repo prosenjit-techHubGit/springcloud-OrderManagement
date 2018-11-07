@@ -32,12 +32,12 @@ pipeline {
       }
     }
     stage('Build Image') {
-     agent any
+     agent none
       steps {
         dir(path: 'account-service') {
-        script{
-          docker.build("prosenjitdocker2018/account-service")
-        }
+      
+          docker build -t prosenjitdocker2018/account-service
+        
         }
 
       }
