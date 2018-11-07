@@ -35,8 +35,9 @@ pipeline {
      agent none
       steps {
         dir(path: 'account-service') {
-      
+        script {
           docker.build("prosenjitdocker2018/account-service")
+        }
         
         }
 
