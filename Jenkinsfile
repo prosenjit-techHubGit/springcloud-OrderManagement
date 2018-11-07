@@ -26,7 +26,7 @@ pipeline {
     stage('Deliver') {
       steps {
         dir(path: 'account-service') {
-          sh './jenkins/scripts/deliver.sh'
+          sh 'mvn install'
         }
 
       }
