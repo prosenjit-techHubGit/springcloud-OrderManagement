@@ -15,5 +15,35 @@ pipeline {
 
       }
     }
+    stage('Test') {
+      steps {
+        dir(path: 'account-service') {
+          sh 'mvn test'
+        }
+
+      }
+    }
+    stage('Deliver') {
+      steps {
+        dir(path: 'account-service') {
+          sh 'mvn install'
+        }
+
+      }
+    }
+    stage('Docker image') {
+      agent {
+        node {
+          label 'docker'
+        }
+
+      }
+      steps {
+        dir(path: 'account-service') {
+          sh 'docker build -t prosenjitdocker2018/account-service:version1'
+        }
+
+      }
+    }
   }
 }
