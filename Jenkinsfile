@@ -36,7 +36,7 @@ pipeline {
       steps {
         dir(path: 'account-service') {
       
-          docker build -t prosenjitdocker2018/account-service
+          docker.build("prosenjitdocker2018/account-service")
         
         }
 
