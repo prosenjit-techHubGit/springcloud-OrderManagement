@@ -32,6 +32,12 @@ pipeline {
       }
     }
     stage('Docker image') {
+      agent {
+        dockerfile {
+          filename 'Dockerfile'
+        }
+
+      }
       steps {
         dir(path: 'account-service') {
           sh 'docker build -t prosenjitdocker2018/account-service:version1'
