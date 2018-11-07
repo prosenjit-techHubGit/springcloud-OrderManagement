@@ -32,7 +32,7 @@ pipeline {
       }
     }
     stage('Build Image') {
-    
+     agent any
       steps {
         dir(path: 'account-service') {
         script{
