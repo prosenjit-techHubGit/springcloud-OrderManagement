@@ -1,7 +1,7 @@
 pipeline {
 
 environment {
-    registry = “prosenjitdocker2018/account-service”
+    registry = 'prosenjitdocker2018/account-service'
     registryCredential='dockerhub'
     dockerImage = ''
   }
