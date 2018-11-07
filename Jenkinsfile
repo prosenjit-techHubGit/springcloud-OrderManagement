@@ -17,12 +17,18 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'mvn test'
+        dir(path: 'account-service') {
+          sh 'mvn test'
+        }
+
       }
     }
     stage('Deliver') {
       steps {
-        sh './jenkins/scripts/deliver.sh'
+        dir(path: 'account-service') {
+          sh './jenkins/scripts/deliver.sh'
+        }
+
       }
     }
   }
