@@ -1,4 +1,11 @@
 pipeline {
+
+environment {
+    registry = “prosenjitdocker2018/account-service”
+    registryCredential='dockerhub'
+    dockerImage = ''
+  }
+
   agent {
     docker {
       args '-v /root/.m2:/root/.m2'
@@ -31,19 +38,14 @@ pipeline {
 
       }
     }
-    stage('Docker image') {
-      agent {
-        node {
-          label 'docker'
-        }
 
-      }
-      steps {
-        dir(path: 'account-service') {
-          sh 'docker build -t prosenjitdocker2018/account-service:version1'
+    stage('Build Image'){
+   steps { 
+    dir(path: 'account-service')
+    script {
+          dockerImage = docker.build registry +":version1"
         }
-
-      }
-    }
+   }
+   }
   }
 }
