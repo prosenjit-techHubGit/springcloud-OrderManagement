@@ -9,29 +9,10 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh '''cd     
+        dir(path: 'account-service') {
+          sh 'mvn -B -DskipTests clean package'
+        }
 
-
-account-service
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-        sh '''
-
-mvn -B -DskipTests clean package'''
       }
     }
   }
