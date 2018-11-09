@@ -1,2 +1,17 @@
 server:
   port: 64954
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url:  jdbc:mysql://192.168.99.101:3306/customerdb?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: my-Appian
+    
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect  
