@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: 140837-item-service
+  datasource:
+    url: jdbc:h2:~/test
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+      
+       
+  h2:
+    console:
+      enabled: true
+
+server:
+  port: 0      
+  

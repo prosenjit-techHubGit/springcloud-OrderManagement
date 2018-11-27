@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: 140837-customer-service
+  datasource:
+    url: jdbc:h2:~/test
+  jpa:
+    hibernate:
+      ddl-auto: update 
+  h2:
+    console:
+      enabled: true
+
+server:
+  port: 0      
+  
