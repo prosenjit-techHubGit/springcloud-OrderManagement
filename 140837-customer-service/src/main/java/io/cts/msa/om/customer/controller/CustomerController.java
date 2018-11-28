@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.cts.msa.om.customer.domain.CustomerDetails;
+import io.cts.msa.om.customer.request.handler.CustomerRequestHandler;
 import io.cts.msa.om.customer.service.CustomerService;
 
 @RequestMapping("/service")
@@ -18,11 +19,14 @@ public class CustomerController {
 
 	@Autowired
 	private CustomerService customerService;
+	
+	@Autowired
+	private CustomerRequestHandler handler;
 
 	@PostMapping("/customer")
 	public Long create(@RequestBody CustomerDetails customerDetails) {
 
-		Long custid = customerService.createCustomer(customerDetails);
+		Long custid = handler.handleCreateCustomer(customerDetails);
 
 		return custid;
 

@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: 140837-sales-order-service
+  datasource:
+    url: jdbc:h2:~/test;AUTO_SERVER=TRUE
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+      
+       
+  h2:
+    console:
+      enabled: true
+
+server:
+  port: 9091
+  
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka 
+    enabled: true
+    fetch-registry: true 
+    register-with-eureka: true
+    
+item-service:
+  ribbon:
+    eureka:
+      enabled: false
+    listOfServers: http://localhost:8081
+    ServerListRefreshInterval: 15000             
+  

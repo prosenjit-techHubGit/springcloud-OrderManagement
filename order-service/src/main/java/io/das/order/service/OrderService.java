@@ -1,9 +1,7 @@
 package io.das.order.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.das.order.domain.Customer;
-import io.das.order.domain.LineItem;
-import io.das.order.domain.Order;
-import io.das.order.domain.Product;
+import io.das.order.entity.Order;
+
+import io.das.order.repository.OrderRepository;
 
 @Service
 public class OrderService implements IOrderService {
@@ -22,31 +20,28 @@ public class OrderService implements IOrderService {
 
 	private CustomerService customerService;
 	private ProductService productService;
+	private OrderRepository orderRepository;
 
 	@Autowired
-	public OrderService(CustomerService customerService, ProductService productService) {
+	public OrderService(CustomerService customerService, ProductService productService,
+			OrderRepository orderRepository) {
 		this.customerService = customerService;
 		this.productService = productService;
+		this.orderRepository = orderRepository;
 
 	}
 
 	public Order getOrderById(Long id) {
 
-		Order order = new Order(new Long(12345), "Applicances", "Submitted", new Long(12));
-		List<LineItem> lineItems = new ArrayList<LineItem>();
-		lineItems.addAll(Arrays.asList(new LineItem[] { new LineItem(new Long(12345), null, 2, "HMRF00233", 45670.67),
-				new LineItem(new Long(12346), null, 2, "HMRF00233", 45670.67) }));
+		Order order = null;
+		Optional<Order> opt = orderRepository.findById(id);
+		if (opt.isPresent()) {
 
-		lineItems = lineItems.stream().map(li -> {
-
-			Product product = productService.getProductBySku(li.getProductSku());
-			li.setDesc(product.getDescription());
-			return li;
-		}).collect(Collectors.toList());
-
-		order.setLineItems(lineItems);
+			order = opt.get();
+		}
 
 		return order;
+
 	}
 
 	public List<Order> getOrdersByCustomerId(Long custId) {
@@ -64,15 +59,20 @@ public class OrderService implements IOrderService {
 			log.info("Customer Details: " + customer);
 			log.info("Customer Verified...Retrieving Orders");
 
-			orders = Arrays.asList(new Order[] { new Order(new Long(12345), "Applicances", "Submitted", new Long(12)),
-					new Order(new Long(12346), "Applicances", "Submitted", new Long(12)) });
 		}
 		return orders;
 	}
 
-	public Order createOrder(Order order) {
+	public Order createOrder(Order newOrder) {
 
-		return new Order(order.getOderId(), order.getOrderType(), order.getStatus(), order.getCustomerId());
+		return orderRepository.save(newOrder);
+
+	}
+
+	public Order getLineItemsByOrderId(Order newOrder) {
+
+		return orderRepository.save(newOrder);
+
 	}
 
 }

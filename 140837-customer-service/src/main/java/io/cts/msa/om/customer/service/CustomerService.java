@@ -10,15 +10,18 @@ import org.springframework.stereotype.Service;
 import io.cts.msa.om.customer.domain.CustomerDetails;
 import io.cts.msa.om.customer.entity.Customer;
 import io.cts.msa.om.customer.repository.CustomerRepository;
+import io.cts.msa.om.customer.service.messaging.CustomerMessageSender;
 
 @Service
 public class CustomerService {
 
 	private CustomerRepository customerRepository;
+	private CustomerMessageSender customerMessageSender;
 
 	@Autowired
-	public CustomerService(CustomerRepository customerRepository) {
+	public CustomerService(CustomerRepository customerRepository, CustomerMessageSender customerMessageSender) {
 		this.customerRepository = customerRepository;
+		this.customerMessageSender = customerMessageSender;
 
 	}
 

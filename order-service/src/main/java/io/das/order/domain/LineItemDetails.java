@@ -1,6 +1,6 @@
 package io.das.order.domain;
 
-public class LineItem {
+public class LineItemDetails {
 
 	private Long id;
 	private Long orderId;
@@ -9,7 +9,7 @@ public class LineItem {
 	private String productSku;
 	private double price;
 
-	public LineItem(Long orderId, String desc, int qty, String productSku, double price) {
+	public LineItemDetails(Long orderId, String desc, int qty, String productSku, double price) {
 		super();
 		this.orderId = orderId;
 		this.desc = desc;
@@ -18,7 +18,7 @@ public class LineItem {
 		this.price = price;
 	}
 
-	public LineItem() {
+	public LineItemDetails() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -62,5 +62,13 @@ public class LineItem {
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
+
+	@Override
+	public String toString() {
+		return "LineItemDetails [id=" + id + ", orderId=" + orderId + ", desc=" + desc + ", qty=" + qty
+				+ ", productSku=" + productSku + ", price=" + price + "]";
+	}
+	
+	
 
 }

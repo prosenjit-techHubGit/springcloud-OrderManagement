@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -13,26 +14,28 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "OM_ODR_LI")
-public class LineItem implements Serializable {
+public class LineItem {
+	
+	 private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "orderId")
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name = "orderId", nullable = false, updatable = false, insertable = true)
 	private Order order;
 
 	// private Long orderId;
-	private String description;
+
 	private Long qty;
 	private String productSku;
 	private double price;
 
-	public LineItem(String desc, Long qty, String productSku, double price) {
+	public LineItem(Long qty, String productSku, double price) {
 		super();
 		// this.orderId = orderId;
-		this.description = desc;
+
 		this.qty = qty;
 		this.productSku = productSku;
 		this.price = price;
@@ -71,14 +74,6 @@ public class LineItem implements Serializable {
 
 	public void setPrice(double price) {
 		this.price = price;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String desc) {
-		this.description = desc;
 	}
 
 	public Order getOrder() {

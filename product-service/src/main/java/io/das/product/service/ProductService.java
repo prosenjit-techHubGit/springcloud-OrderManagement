@@ -1,17 +1,34 @@
 package io.das.product.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import io.das.product.domain.Product;
-import io.das.product.reference.ProductCategory;
+import io.das.product.entity.Product;
+import io.das.product.repository.ProductRepository;
 
 @Service
 public class ProductService {
 
+	@Autowired
+	ProductRepository productRepository;
+
 	public Product getProductById(Long id) {
 
-		return new Product(new Long(1), "HMRF678", ProductCategory.HOME_APPLIANCES, "Air Conditioner",
-				"Air conditioning device");
+		return null;
+
+	}
+
+	public List<Product> getProductByCategory(int categoryId) {
+
+		return productRepository.findByCategory(categoryId);
+
+	}
+
+	public Product addProduct(Product product) {
+
+		return productRepository.save(product);
 
 	}
 

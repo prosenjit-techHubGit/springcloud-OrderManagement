@@ -1,5 +1,6 @@
 package io.cts.msa.om.item.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import io.cts.msa.om.item.domain.ItemDetails;
 import io.cts.msa.om.item.entity.Item;
-import io.cts.msa.om.item.entity.ItemRepository;
+import io.cts.msa.om.item.repository.ItemRepository;
 
 @Service
 public class ItemService {
@@ -42,6 +43,7 @@ public class ItemService {
 	}
 
 	public ItemDetails getItemByName(String name) {
+
 		Item item = itemRepository.findByName(name);
 		ItemDetails itemDetails = null;
 		if (item != null) {
@@ -57,4 +59,26 @@ public class ItemService {
 
 	}
 
+	public List<ItemDetails> getAllItemByName(List<String> names) {
+       
+		System.out.println(names);
+		List<Item> items = itemRepository.findAllByNameIn(names);
+		System.out.println(items);
+		List<ItemDetails> allItems = null;
+		if (items != null) {
+
+			allItems = items.stream().map(i -> {
+
+				ItemDetails itemDetails = new ItemDetails();
+				itemDetails.setId(i.getId());
+				itemDetails.setName(i.getName());
+				itemDetails.setDescription(i.getDescription());
+				itemDetails.setPrice(i.getPrice());
+
+				return itemDetails;
+			}).collect(Collectors.toList());
+		}
+
+		return allItems;
+	}
 }

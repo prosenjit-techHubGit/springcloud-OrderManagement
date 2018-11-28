@@ -7,6 +7,7 @@ public class Product {
 	private int category;
 	private String name;
 	private String description;
+	private double unitPrice;
 
 	public Long getId() {
 		return id;
