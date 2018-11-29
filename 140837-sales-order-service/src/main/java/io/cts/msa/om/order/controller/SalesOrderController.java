@@ -1,9 +1,13 @@
 package io.cts.msa.om.order.controller;
 
+import java.util.List;
+
 import javax.persistence.AttributeOverride;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,13 +32,29 @@ public class SalesOrderController {
 		this.salesOrderService = salesOrderService;
 
 	}
-    
+
 	@PostMapping("/orders")
 	public Long createOrder(@Valid @RequestBody SalesOrderRequest salesOrderRequest) {
 
 		return orderRequestHandler.createOrder(salesOrderRequest);
 
 		// return salesOrderService.createOrder(orderDetails);
+
+	}
+
+	@GetMapping("/orders")
+
+	public List<SalesOrderDetails> getAllOrders() {
+
+		return salesOrderService.getAllOrders();
+
+	}
+
+	@GetMapping("/orders/{id}")
+
+	public SalesOrderDetails getOrderById(@PathVariable Long id) {
+
+		return salesOrderService.getOrderById(id);
 
 	}
 

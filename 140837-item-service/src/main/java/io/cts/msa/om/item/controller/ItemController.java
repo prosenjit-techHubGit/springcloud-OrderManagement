@@ -25,24 +25,22 @@ import io.cts.msa.om.item.domain.ItemDetails;
 import io.cts.msa.om.item.service.ItemService;
 
 @RestController
-@RequestMapping("/service")
+@RequestMapping("/items")
 public class ItemController {
 
 	@Autowired
 	private ItemService itemService;
 
-	@GetMapping("/item/{name}")
+	@GetMapping("/{name}")
 	public ItemDetails getItemByName(@PathVariable String name) {
 
 		return itemService.getItemByName(name);
 
 	}
 
-	@PostMapping("/items")
+	@PostMapping
 	public List<ItemDetails> getItemList(@RequestBody String name) {
-		
-		
-		
+
 		List<ItemDetails> itemDetails = null;
 		JSONObject obj = null;
 		try {
@@ -57,22 +55,29 @@ public class ItemController {
 				}
 
 				System.out.println(items);
-				itemDetails	= itemService.getAllItemByName(items);
+				itemDetails = itemService.getAllItemByName(items);
 
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return itemDetails;
 
 	}
 
-	@GetMapping("/items")
+	@GetMapping
 	public List<ItemDetails> getAllItems() {
 
 		return itemService.getAllItems();
+
+	}
+
+	@PostMapping("/add")
+	public List<Long> addItems(@RequestBody List<ItemDetails> items) {
+
+		return itemService.addItems(items);
 
 	}
 

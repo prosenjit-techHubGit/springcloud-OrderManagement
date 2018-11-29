@@ -60,7 +60,7 @@ public class ItemService {
 	}
 
 	public List<ItemDetails> getAllItemByName(List<String> names) {
-       
+
 		System.out.println(names);
 		List<Item> items = itemRepository.findAllByNameIn(names);
 		System.out.println(items);
@@ -80,5 +80,40 @@ public class ItemService {
 		}
 
 		return allItems;
+	}
+
+	public List<Long> addItems(List<ItemDetails> items) {
+
+		List<Item> itemEntities = null;
+		List<Long> newItemIds = null;
+
+		if (items != null && items.size() != 0) {
+
+			itemEntities = items.stream().map(i -> {
+
+				Item item = new Item();
+				item.setDescription(i.getDescription());
+				item.setName(i.getName());
+				item.setPrice(i.getPrice());
+
+				return item;
+			}).collect(Collectors.toList());
+
+		}
+
+		try {
+			itemEntities = itemRepository.saveAll(itemEntities);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (itemEntities != null && itemEntities.size() != 0) {
+
+			newItemIds = itemEntities.stream().map(e -> e.getId()).collect(Collectors.toList());
+		}
+
+		return newItemIds;
+
 	}
 }

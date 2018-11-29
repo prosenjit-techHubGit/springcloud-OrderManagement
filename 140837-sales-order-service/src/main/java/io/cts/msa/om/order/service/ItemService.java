@@ -23,6 +23,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 import io.cts.msa.om.order.domain.ItemDetails;
 import io.cts.msa.om.order.exception.InvalidItemException;
@@ -38,6 +40,9 @@ public class ItemService {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	@HystrixCommand(fallbackMethod = "getEmptyItem", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000"),
+			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "4") })
 	public ItemDetails getItemByName(String itemName) {
 
 		HttpHeaders headers = new HttpHeaders();
@@ -73,6 +78,15 @@ public class ItemService {
 		return result;
 	}
 
+	public ItemDetails getEmptyItem(String itemName) {
+		logger.info("Fallback method invoked");
+		return new ItemDetails();
+
+	}
+
+	@HystrixCommand(fallbackMethod = "getEmptyItem", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000"),
+			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "4") })
 	public List<ItemDetails> getItemByNameIn(List<String> itemName) {
 
 		Gson gsonBuilder = new GsonBuilder().create();
@@ -87,7 +101,7 @@ public class ItemService {
 
 		ResponseEntity<List<ItemDetails>> response = null;
 		try {
-			response = restTemplate.exchange("http://140837-item-service/service/items", HttpMethod.POST, request,
+			response = restTemplate.exchange("https://140837-item-service.cfapps.io/service/items", HttpMethod.POST, request,
 					new ParameterizedTypeReference<List<ItemDetails>>() {
 					});
 		} catch (RestClientException e) {
@@ -111,6 +125,12 @@ public class ItemService {
 		}
 
 		return result;
+	}
+
+	public List<ItemDetails> getEmptyItem(List<String> itemName) {
+		logger.info("Fallback method invoked");
+		return Arrays.asList(new ItemDetails[] { new ItemDetails() });
+
 	}
 
 }

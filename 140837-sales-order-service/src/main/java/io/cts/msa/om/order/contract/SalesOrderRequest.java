@@ -21,7 +21,7 @@ public class SalesOrderRequest {
 		// TODO Auto-generated constructor stub
 	}
 
-	@NotNull
+	
 	private Date orderDate;
 	private String orderDesc;
 

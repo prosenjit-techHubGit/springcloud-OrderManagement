@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +18,15 @@ import io.cts.msa.om.order.domain.CustomerDetails;
 import io.cts.msa.om.order.domain.ItemDetails;
 import io.cts.msa.om.order.domain.OrderLineItemDetails;
 import io.cts.msa.om.order.domain.SalesOrderDetails;
+import io.cts.msa.om.order.exception.InvalidItemException;
 import io.cts.msa.om.order.service.CustomerService;
 import io.cts.msa.om.order.service.ItemService;
 import io.cts.msa.om.order.service.SalesOrderService;
 
 @Component
 public class OrderRequestHandler {
+	
+	private Logger logger = LoggerFactory.getLogger(OrderRequestHandler.class);
 
 	private CustomerService customerService;
 	private ItemService itemService;
@@ -38,34 +43,40 @@ public class OrderRequestHandler {
 
 	public Long createOrder(@Valid SalesOrderRequest salesOrderRequest) {
 
+		Long newOrderId = null;
 		CustomerDetails custDetails = getCustomer(salesOrderRequest.getCustId());
 		String[] itemNames = salesOrderRequest.getItemNames();
-		Set<ItemDetails> items = new HashSet<ItemDetails>(getItemMulti(Arrays.asList(itemNames)));
 
-		/*
-		 * for (String item : itemNames) {
-		 * 
-		 * items.add(getItem(item));
-		 * 
-		 * }
-		 */
+		List<ItemDetails> itemList = getItemMulti(Arrays.asList(itemNames));
 
-		SalesOrderDetails orderDetails = new SalesOrderDetails();
-		orderDetails.setOrderDate(salesOrderRequest.getOrderDate());
-		orderDetails.setOrderDesc(salesOrderRequest.getOrderDesc());
-		orderDetails.setCustomer(custDetails);
+		itemList = itemList.stream().filter(i -> i.getName() != null).collect(Collectors.toList());
 
-		Set<OrderLineItemDetails> orderLineItems = items.stream().map(i -> {
+		if (itemList != null && itemList.size() == itemNames.length) {
 
-			OrderLineItemDetails oli = new OrderLineItemDetails();
-			oli.setItem_name(i.getName());
-			oli.setItem_quantity(3);
-			return oli;
+			Set<ItemDetails> items = new HashSet<ItemDetails>(getItemMulti(Arrays.asList(itemNames)));
 
-		}).collect(Collectors.toSet());
+			SalesOrderDetails orderDetails = new SalesOrderDetails();
+			orderDetails.setOrderDate(salesOrderRequest.getOrderDate());
+			orderDetails.setOrderDesc(salesOrderRequest.getOrderDesc());
+			orderDetails.setCustomer(custDetails);
 
-		orderDetails.setLineItems(orderLineItems);
-		return salesOrderService.createOrder(orderDetails);
+			Set<OrderLineItemDetails> orderLineItems = items.stream().map(i -> {
+
+				OrderLineItemDetails oli = new OrderLineItemDetails();
+				oli.setItem_name(i.getName());
+				oli.setItem_quantity(3);
+				return oli;
+
+			}).collect(Collectors.toSet());
+
+			orderDetails.setLineItems(orderLineItems);
+			newOrderId = salesOrderService.createOrder(orderDetails);
+		} else {
+			logger.error("One or more items in the list do not exist");
+			throw new InvalidItemException();
+		}
+
+		return newOrderId;
 
 	}
 

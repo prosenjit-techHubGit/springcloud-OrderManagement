@@ -1,5 +1,6 @@
 package io.cts.msa.om.order.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,11 +18,12 @@ import io.cts.msa.om.order.domain.SalesOrderDetails;
 import io.cts.msa.om.order.entity.Customer;
 import io.cts.msa.om.order.entity.OrderLineItem;
 import io.cts.msa.om.order.entity.SalesOrder;
+import io.cts.msa.om.order.exception.OrderSaveToDBException;
 import io.cts.msa.om.order.repository.SalesOrderRepository;
 
 @Service
 public class SalesOrderService {
-	
+
 	private Logger logger = LoggerFactory.getLogger(SalesOrderService.class);
 
 	private SalesOrderRepository salesOrderRepository;
@@ -67,9 +69,12 @@ public class SalesOrderService {
 
 		try {
 			salesOrder = salesOrderRepository.save(salesOrder);
-		} catch ( Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+
+			logger.error("Error saving order record to db");
+
+			throw new OrderSaveToDBException(e.getMessage());
+
 		}
 
 		return salesOrder.getId();
@@ -83,10 +88,36 @@ public class SalesOrderService {
 
 		Optional<SalesOrder> salesOrderOpt = salesOrderRepository.findById(id);
 
-		salesOrderOpt.ifPresent(o -> salesOrderOpt.get());
+		if (salesOrderOpt.isPresent()) {
+			salesOrder = salesOrderOpt.get();
+			orderDetails.setId(salesOrder.getId());
+			orderDetails.setOrderDesc(salesOrder.getOrderDesc());
 
-		orderDetails.setId(salesOrder.getId());
-		orderDetails.setOrderDesc(salesOrder.getOrderDesc());
+		}
+
+		return orderDetails;
+
+	}
+
+	public List<SalesOrderDetails> getAllOrders() {
+
+		List<SalesOrder> salesOrder = null;
+		List<SalesOrderDetails> orderDetails = null;
+
+		salesOrder = salesOrderRepository.findAll();
+
+		if (salesOrder != null && salesOrder.size() != 0) {
+
+			orderDetails = salesOrder.stream().map(o -> {
+				SalesOrderDetails sod = new SalesOrderDetails();
+				sod.setId(o.getId());
+				sod.setOrderDesc(o.getOrderDesc());
+				sod.setTotalPrice(o.getTotalPrice());
+				return sod;
+
+			}).collect(Collectors.toList());
+
+		}
 
 		return orderDetails;
 

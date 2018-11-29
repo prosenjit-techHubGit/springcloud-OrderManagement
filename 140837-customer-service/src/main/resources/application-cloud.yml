@@ -1,0 +1,21 @@
+spring:
+  
+  #datasource:
+    #url:  jdbc:mysql://192.168.99.100:3306/servicedb?useSSL=false&allowPublicKeyRetrieval=true
+    #username: root
+    #password: Appian6$
+    #driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect        
+        
+eureka:
+  instance:
+    nonSecurePort: 80
+    hostname: ${vcap.application.application_name}
+  client:
+    service-url:
+      defaultZone: ${vcap.services.eureka.credentials.url}
