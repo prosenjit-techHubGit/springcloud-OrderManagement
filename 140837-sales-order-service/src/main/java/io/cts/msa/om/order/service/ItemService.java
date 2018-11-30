@@ -101,7 +101,7 @@ public class ItemService {
 
 		ResponseEntity<List<ItemDetails>> response = null;
 		try {
-			response = restTemplate.exchange("https://140837-item-service.cfapps.io/service/items", HttpMethod.POST, request,
+			response = restTemplate.exchange("http://140837-item-service/service/items", HttpMethod.POST, request,
 					new ParameterizedTypeReference<List<ItemDetails>>() {
 					});
 		} catch (RestClientException e) {

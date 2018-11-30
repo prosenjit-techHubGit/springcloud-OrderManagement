@@ -25,7 +25,7 @@ public class MessageReceiverConfig {
 
 	@Bean
 	public Queue queue() {
-		return new Queue("orderServiceQueue");
+		return new Queue("140837-orderServiceQueue");
 	}
 
 	@Bean

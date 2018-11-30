@@ -87,4 +87,10 @@ public class SalesOrder {
 		this.customer = customer;
 	}
 
+	@Override
+	public String toString() {
+		return "SalesOrder [id=" + id + ", orderDate=" + orderDate + ", customer=" + customer + ", orderDesc="
+				+ orderDesc + ", totalPrice=" + totalPrice + ", lineItems=" + lineItems + "]";
+	}
+
 }

@@ -9,7 +9,7 @@ public class InvalidItemException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	public String getMessage() {
-		return "Item does not exist in the system";
+		return "One or More Items do not exist in the system";
 	}
 
 }

@@ -25,13 +25,21 @@ import io.cts.msa.om.item.domain.ItemDetails;
 import io.cts.msa.om.item.service.ItemService;
 
 @RestController
-@RequestMapping("/items")
+
 public class ItemController {
 
 	@Autowired
 	private ItemService itemService;
 
-	@GetMapping("/{name}")
+	@GetMapping("/")
+
+	public String requestStatus() {
+
+		return "Ok";
+
+	}
+
+	@GetMapping("/service/items/{name}")
 	public ItemDetails getItemByName(@PathVariable String name) {
 
 		return itemService.getItemByName(name);
@@ -67,14 +75,14 @@ public class ItemController {
 
 	}
 
-	@GetMapping
+	@GetMapping("/service/items")
 	public List<ItemDetails> getAllItems() {
 
 		return itemService.getAllItems();
 
 	}
 
-	@PostMapping("/add")
+	@PostMapping("/service/items/add")
 	public List<Long> addItems(@RequestBody List<ItemDetails> items) {
 
 		return itemService.addItems(items);

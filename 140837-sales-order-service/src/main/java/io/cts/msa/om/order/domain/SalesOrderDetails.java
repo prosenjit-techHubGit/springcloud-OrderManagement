@@ -79,4 +79,12 @@ public class SalesOrderDetails {
 		this.lineItems = lineItems;
 	}
 
+	@Override
+	public String toString() {
+		return "SalesOrderDetails [id=" + id + ", orderDate=" + orderDate + ", orderDesc=" + orderDesc + ", totalPrice="
+				+ totalPrice + ", customer=" + customer + ", lineItems=" + lineItems + "]";
+	}
+	
+	
+
 }

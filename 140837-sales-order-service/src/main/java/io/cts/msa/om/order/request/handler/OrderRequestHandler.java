@@ -18,6 +18,8 @@ import io.cts.msa.om.order.domain.CustomerDetails;
 import io.cts.msa.om.order.domain.ItemDetails;
 import io.cts.msa.om.order.domain.OrderLineItemDetails;
 import io.cts.msa.om.order.domain.SalesOrderDetails;
+import io.cts.msa.om.order.entity.OrderLineItem;
+import io.cts.msa.om.order.exception.CustomerRecordNotFoundException;
 import io.cts.msa.om.order.exception.InvalidItemException;
 import io.cts.msa.om.order.service.CustomerService;
 import io.cts.msa.om.order.service.ItemService;
@@ -25,7 +27,7 @@ import io.cts.msa.om.order.service.SalesOrderService;
 
 @Component
 public class OrderRequestHandler {
-	
+
 	private Logger logger = LoggerFactory.getLogger(OrderRequestHandler.class);
 
 	private CustomerService customerService;
@@ -43,8 +45,17 @@ public class OrderRequestHandler {
 
 	public Long createOrder(@Valid SalesOrderRequest salesOrderRequest) {
 
+		logger.info("OrderDate: " + salesOrderRequest.getOrderDate());
+
 		Long newOrderId = null;
 		CustomerDetails custDetails = getCustomer(salesOrderRequest.getCustId());
+
+		if (custDetails == null) {
+			logger.error("Customer id does not exist");
+			throw new CustomerRecordNotFoundException();
+
+		}
+
 		String[] itemNames = salesOrderRequest.getItemNames();
 
 		List<ItemDetails> itemList = getItemMulti(Arrays.asList(itemNames));
@@ -53,11 +64,12 @@ public class OrderRequestHandler {
 
 		if (itemList != null && itemList.size() == itemNames.length) {
 
-			Set<ItemDetails> items = new HashSet<ItemDetails>(getItemMulti(Arrays.asList(itemNames)));
+			Set<ItemDetails> items = new HashSet<ItemDetails>(itemList);
 
 			SalesOrderDetails orderDetails = new SalesOrderDetails();
 			orderDetails.setOrderDate(salesOrderRequest.getOrderDate());
 			orderDetails.setOrderDesc(salesOrderRequest.getOrderDesc());
+			orderDetails.setTotalPrice(salesOrderRequest.getTotalPrice());
 			orderDetails.setCustomer(custDetails);
 
 			Set<OrderLineItemDetails> orderLineItems = items.stream().map(i -> {
