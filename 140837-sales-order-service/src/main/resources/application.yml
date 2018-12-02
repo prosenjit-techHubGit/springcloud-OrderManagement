@@ -4,4 +4,9 @@ management:
       exposure:
         include:
         - "*"             
-  
+spring:
+  security:
+    user:
+      password: 
+      
+      
