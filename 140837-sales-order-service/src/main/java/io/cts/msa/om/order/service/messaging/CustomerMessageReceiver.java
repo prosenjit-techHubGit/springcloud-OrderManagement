@@ -21,7 +21,7 @@ public class CustomerMessageReceiver {
 
 	private Logger logger = LoggerFactory.getLogger(CustomerMessageReceiver.class);
 
-	@RabbitListener(queues = "orderServiceQueue")
+	@RabbitListener(queues = "140837-orderServiceQueue")
 	public void receive(CustomerDetails customerDetails) {
 		logger.info("Received message '{}'", customerDetails.getCustFirstNmae());
 
