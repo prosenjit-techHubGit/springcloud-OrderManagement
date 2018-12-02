@@ -40,6 +40,10 @@ public class ItemService {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	@Autowired
+
+	private InvalidItemException itemException;
+
 	@HystrixCommand(fallbackMethod = "getEmptyItem", commandProperties = {
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000"),
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "4") })
@@ -69,7 +73,7 @@ public class ItemService {
 
 			if (result == null) {
 
-				throw new InvalidItemException();
+				throw itemException;
 
 			}
 

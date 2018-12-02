@@ -19,11 +19,11 @@ public class MessageSenderConfig {
 	public Exchange eventExchange() {
 		return new TopicExchange("140837-exchange");
 	}
-	
-	 @Bean
-	    public MessageConverter jsonMessageConverter(){
-	        return new Jackson2JsonMessageConverter();
-	    }
+
+	@Bean
+	public MessageConverter jsonMessageConverter() {
+		return new Jackson2JsonMessageConverter();
+	}
 
 	@Bean
 	public CustomerMessageSender customerMessageSender(RabbitTemplate rabbitTemplate, Exchange eventExchange) {

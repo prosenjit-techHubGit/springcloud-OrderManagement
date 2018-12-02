@@ -33,13 +33,15 @@ public class OrderRequestHandler {
 	private CustomerService customerService;
 	private ItemService itemService;
 	private SalesOrderService salesOrderService;
+	private InvalidItemException itemException;
 
 	@Autowired
 	public OrderRequestHandler(CustomerService customerService, ItemService itemService,
-			SalesOrderService salesOrderService) {
+			SalesOrderService salesOrderService, InvalidItemException itemException) {
 		this.customerService = customerService;
 		this.itemService = itemService;
 		this.salesOrderService = salesOrderService;
+		this.itemException = itemException;
 
 	}
 
@@ -85,7 +87,7 @@ public class OrderRequestHandler {
 			newOrderId = salesOrderService.createOrder(orderDetails);
 		} else {
 			logger.error("One or more items in the list do not exist");
-			throw new InvalidItemException();
+			throw itemException;
 		}
 
 		return newOrderId;
