@@ -22,14 +22,21 @@ public class ServiceResponseExceptionHandler extends ResponseEntityExceptionHand
 	public final ResponseEntity<ErrorDetails> handleCustomerCreateException(CustomerCreateException ex,
 			WebRequest request) {
 		ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(errorDetails, HttpStatus.EXPECTATION_FAILED);
+		return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@ExceptionHandler(CustomerMessageSendException.class)
 	public final ResponseEntity<ErrorDetails> handleCustomerMessageSendException(CustomerMessageSendException ex,
 			WebRequest request) {
 		ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(errorDetails, HttpStatus.EXPECTATION_FAILED);
+		return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@ExceptionHandler(CustomerRecordQueryException.class)
+	public final ResponseEntity<ErrorDetails> handleCustomerRecordQueryException(CustomerRecordQueryException ex,
+			WebRequest request) {
+		ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@Override
