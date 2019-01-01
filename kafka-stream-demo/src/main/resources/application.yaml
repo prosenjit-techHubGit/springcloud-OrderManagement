@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: tcp://192.168.56.101:9092
+      bindings:        
+        greetings-out:
+          destination: my-topic
+          contentType: application/json

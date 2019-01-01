@@ -2,6 +2,8 @@ package io.cts.msa.om.customer.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +18,9 @@ import io.cts.msa.om.customer.service.CustomerService;
 @RequestMapping("/service")
 @RestController
 public class CustomerController {
+	
+	Logger logger = LoggerFactory.getLogger(CustomerController.class);
+
 
 	@Autowired
 	private CustomerService customerService;
@@ -34,7 +39,8 @@ public class CustomerController {
 
 	@GetMapping("/customers")
 	public List<CustomerDetails> getCustomers() {
-
+		
+		logger.info("Getting Customers");
 		return customerService.getCustomers();
 
 	}
